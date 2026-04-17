@@ -10,7 +10,7 @@ import newspaperFull from "/RooseveltLoweryInNewsPaperFullArticle.jpg";
 import workCompilation from "/lowerydoingconstructioncompilationof4photos.jpg";
 import teamWorking from "/LoweryAndHisTeamWorking.png";
 import famuFan from "/RooseveltFAMUFootballfan.png";
-import famuInvestment from "/lowerysmasonryinvestingintofloridaa&muniversity.jpg";
+import famuInvestment from "/lowerysmasonryinvestingintofloridauniversity.jpg";
 
 function About() {
   return (
