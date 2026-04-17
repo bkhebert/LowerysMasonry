@@ -89,7 +89,7 @@ function SectionRow({
       <div className="flex-1 relative">
         <div className="relative group">
           {/* Glow effect */}
-          <div className="absolute -inset-2 bg-gradient-to-r from-primary/20 to-highlight/20 
+          <div className="absolute -inset-2 bg-gradient-to-r from-muted/20 to-highlight/20 
                         rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition duration-700" />
           
           {/* Image container */}

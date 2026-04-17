@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -20,17 +19,19 @@
 
 a {
   font-weight: 500;
-  color: #646cff;
+  color: #7B1414;
   text-decoration: inherit;
 }
 a:hover {
-  color: #535bf2;
+  color: #A9A9A9;
 }
 
 body {
   margin: 0;
   min-height: 100vh;
-  background-color: #121515; /* matches your theme */
+  background-color: #D4D4D4;
+  background-image: radial-gradient(circle at 25% 50%, rgba(123, 20, 20, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
 }
 
 h1 {
@@ -50,7 +51,7 @@ button {
   transition: border-color 0.25s;
 }
 button:hover {
-  border-color: #646cff;
+  border-color: #7B1414;
 }
 button:focus,
 button:focus-visible {
@@ -63,36 +64,34 @@ button:focus-visible {
     background-color: #ffffff;
   }
   a:hover {
-    color: #747bff;
+    color: #7B1414;
   }
   button {
     background-color: #f9f9f9;
   }
 }
 
-
-
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 3.9%;
+    --background: 0 0% 95%; /* #F3F3F3 */
+    --foreground: 0 0% 20%;
     --card: 0 0% 100%;
     --card-foreground: 0 0% 3.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 3.9%;
-    --primary: 0 0% 9%;
+    --primary: 0 65% 28%; /* #7B1414 */
     --primary-foreground: 0 0% 98%;
-    --secondary: 0 0% 96.1%;
+    --secondary: 0 0% 66%; /* #A9A9A9 */
     --secondary-foreground: 0 0% 9%;
     --muted: 0 0% 96.1%;
     --muted-foreground: 0 0% 45.1%;
-    --accent: 0 0% 96.1%;
-    --accent-foreground: 0 0% 9%;
+    --accent: 0 65% 28%;
+    --accent-foreground: 0 0% 98%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
     --border: 0 0% 89.8%;
     --input: 0 0% 89.8%;
-    --ring: 0 0% 3.9%;
+    --ring: 0 65% 28%;
     --chart-1: 12 76% 61%;
     --chart-2: 173 58% 39%;
     --chart-3: 197 37% 24%;
@@ -107,19 +106,19 @@ button:focus-visible {
     --card-foreground: 0 0% 98%;
     --popover: 0 0% 3.9%;
     --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 9%;
-    --secondary: 0 0% 14.9%;
-    --secondary-foreground: 0 0% 98%;
+    --primary: 0 65% 28%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 0 0% 66%;
+    --secondary-foreground: 0 0% 9%;
     --muted: 0 0% 14.9%;
     --muted-foreground: 0 0% 63.9%;
-    --accent: 0 0% 14.9%;
+    --accent: 0 65% 28%;
     --accent-foreground: 0 0% 98%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
     --border: 0 0% 14.9%;
     --input: 0 0% 14.9%;
-    --ring: 0 0% 83.1%;
+    --ring: 0 65% 28%;
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
@@ -128,17 +127,12 @@ button:focus-visible {
   }
 }
 
-
-
 @layer base {
   * {
-
   }
   body {
   }
 }
-
-/* Add to your index.css */
 
 @tailwind base;
 @tailwind components;
@@ -146,15 +140,13 @@ button:focus-visible {
 
 /* Custom animations and utilities */
 @layer utilities {
-  /* Grid pattern for background */
   .bg-grid-pattern {
     background-image: 
-      linear-gradient(rgba(107, 205, 200, 0.05) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(107, 205, 200, 0.05) 1px, transparent 1px);
+      linear-gradient(rgba(123, 20, 20, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(123, 20, 20, 0.05) 1px, transparent 1px);
     background-size: 50px 50px;
   }
 
-  /* Glow animations */
   @keyframes float {
     0%, 100% { transform: translateY(0px); }
     50% { transform: translateY(-10px); }
@@ -164,7 +156,6 @@ button:focus-visible {
     animation: float 6s ease-in-out infinite;
   }
 
-  /* Gradient text animation */
   @keyframes gradient-shift {
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
@@ -176,7 +167,6 @@ button:focus-visible {
     animation: gradient-shift 8s ease infinite;
   }
 
-  /* Delay utilities */
   .delay-100 {
     animation-delay: 100ms;
   }
@@ -190,38 +180,34 @@ button:focus-visible {
   }
 }
 
-/* Smooth scrolling */
 html {
   scroll-behavior: smooth;
 }
 
-/* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #121515;
+  background: #F3F3F3;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #393c3c;
+  background: #A9A9A9;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #6bcdc8;
+  background: #7B1414;
 }
 
-/* Selection color */
 ::selection {
-  background: #6bcdc8;
-  color: #121515;
+  background: #7B1414;
+  color: #F3F3F3;
 }
 
-/* Focus styles */
 *:focus-visible {
-  outline: 2px solid #6bcdc8;
+  outline: 2px solid #7B1414;
   outline-offset: 2px;
 }
