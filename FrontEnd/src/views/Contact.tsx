@@ -380,13 +380,13 @@ function ContactForm({ form, handleChange, handleSubmit, isSubmitting, submitSta
                           disabled:opacity-50 disabled:cursor-not-allowed">
               {isSubmitting ? (
                 <>
-                  <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  <div className="w-5 h-5 border-2 border-black/30 border-t-white rounded-full animate-spin text-black" />
                   <span>Sending...</span>
                 </>
               ) : (
                 <>
-                  <Send className="w-5 h-5" />
-                  <span>Send Message</span>
+                  <Send className="w-5 h-5 text-black" />
+                  <span className="text-black">Send Message</span>
                 </>
               )}
             </div>
