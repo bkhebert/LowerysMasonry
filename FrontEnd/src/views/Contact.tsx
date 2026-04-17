@@ -1,16 +1,21 @@
-// Contact.tsx
 import { useState, useRef, useEffect } from "react";
-import { Mail, MapPin, Clock, Send, ExternalLink, Sparkles, ChevronRight } from 'lucide-react';
+import { Mail, MapPin, Phone, Send, Clock, Facebook, Instagram, MessageCircle, CheckCircle } from 'lucide-react';
+
+// Import logos
+import logoTransparent from "/lowerysmasonrybadgelogotransparent.png";
+import logoFull from "/lowerysmasonrylogo.png";
 
 function Contact() {
   const [form, setForm] = useState({
     name: "",
     email: "",
-    subject: "",
+    phone: "",
+    service: "",
     message: "",
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<{ type: 'success' | 'error' | null; message: string }>({ type: null, message: '' });
   const [activeField, setActiveField] = useState<string | null>(null);
   const pageRef = useRef<HTMLDivElement>(null);
 
@@ -23,54 +28,53 @@ function Contact() {
     });
   };
 
-const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  setIsSubmitting(true);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitStatus({ type: null, message: '' });
 
-  try {
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/contact`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(form),
-    });
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/contact`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(form),
+      });
 
-    const data = await res.json();
+      const data = await res.json();
 
-    if (!res.ok) {
-      throw new Error(data.message || "Something went wrong");
+      if (!res.ok) {
+        throw new Error(data.message || "Something went wrong");
+      }
+
+      setSubmitStatus({ 
+        type: 'success', 
+        message: "✅ Message sent successfully! Roosevelt will get back to you soon." 
+      });
+      
+      setForm({
+        name: "",
+        email: "",
+        phone: "",
+        service: "",
+        message: "",
+      });
+
+      setTimeout(() => {
+        setSubmitStatus({ type: null, message: '' });
+      }, 5000);
+
+    } catch (err: any) {
+      console.error(err);
+      setSubmitStatus({ 
+        type: 'error', 
+        message: "❌ Failed to send message. Please call us directly or try again." 
+      });
+    } finally {
+      setIsSubmitting(false);
     }
-
-    console.log("Server response:", data);
-
-    // Success message
-    alert("✅ Message sent successfully!");
-
-    // Optional: still show Linktree if you want
-    const userConfirmed = window.confirm(
-      "Want to connect with us on Linktree as well?"
-    );
-
-    if (userConfirmed) {
-      window.open("https://linktr.ee/happyfuturesrobotics", "_blank");
-    }
-
-    // Reset form
-    setForm({
-      name: "",
-      email: "",
-      subject: "",
-      message: "",
-    });
-
-  } catch (err: any) {
-    console.error(err);
-    alert("❌ Failed to send message. Try again.");
-  } finally {
-    setIsSubmitting(false);
-  }
-};
+  };
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -85,51 +89,34 @@ const handleSubmit = async (e: React.FormEvent) => {
     );
 
     if (pageRef.current) observer.observe(pageRef.current);
-
     return () => observer.disconnect();
   }, []);
 
   return (
-    <div className="min-h-screen bg-dark-gradient bg-fixed relative overflow-hidden">
-      {/* Floating background elements */}
-      <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-20 left-20 w-96 h-96 bg-primary/5 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-20 right-20 w-96 h-96 bg-highlight/5 rounded-full blur-3xl animate-pulse delay-1000" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-glow/3 rounded-full blur-3xl animate-pulse delay-500" />
-        {/* Grid pattern overlay */}
-        <div className="absolute inset-0 bg-grid-pattern opacity-[0.02]" />
-      </div>
-
-      {/* Main Content */}
-      <div
-        ref={pageRef}
-        className="relative z-10 min-h-screen flex items-center justify-center px-6 py-16
-                   opacity-0 translate-y-8 transition-all duration-1000 ease-out
-                   [&.page-visible]:opacity-100 [&.page-visible]:translate-y-0"
-      >
-        <div className="w-full max-w-6xl">
-          {/* Header */}
+    <div className="min-h-screen bg-gradient-to-br from-background to-background/80">
+      <div className="relative z-10 min-h-screen flex items-center justify-center px-6 py-16">
+        <div
+          ref={pageRef}
+          className="w-full max-w-6xl opacity-0 translate-y-8 transition-all duration-1000 ease-out
+                     [&.page-visible]:opacity-100 [&.page-visible]:translate-y-0"
+        >
           <ContactHeader />
-
-          {/* Main Contact Grid */}
+          
           <div className="grid lg:grid-cols-5 gap-8">
-            {/* Contact Info Sidebar */}
             <ContactInfoSidebar />
-
-            {/* Contact Form */}
             <div className="lg:col-span-3">
               <ContactForm
                 form={form}
                 handleChange={handleChange}
                 handleSubmit={handleSubmit}
                 isSubmitting={isSubmitting}
+                submitStatus={submitStatus}
                 activeField={activeField}
                 setActiveField={setActiveField}
               />
             </div>
           </div>
-
-          {/* Alternative Contact Methods */}
+          
           <AlternativeContact />
         </div>
       </div>
@@ -137,109 +124,112 @@ const handleSubmit = async (e: React.FormEvent) => {
   );
 }
 
-// Header Component
 function ContactHeader() {
   return (
     <div className="text-center mb-12">
-      {/* Badge */}
-      <div className="inline-flex items-center gap-3 mb-6 bg-surface/30 backdrop-blur-sm px-6 py-2.5 rounded-full border border-border/30">
-        <div className="w-2 h-2 bg-highlight rounded-full animate-pulse" />
-        <span className="text-xs uppercase tracking-[0.3em] text-highlight font-mono">
-          Get in Touch
+      <div className="inline-flex items-center gap-3 mb-6 bg-[muted]/10 backdrop-blur-sm px-6 py-2.5 rounded-full">
+        <div className="w-2 h-2 bg-[primary] rounded-full animate-pulse" />
+        <span className="text-xs uppercase tracking-[0.3em] text-[primary] font-mono font-semibold">
+          Get In Touch
         </span>
       </div>
 
-      {/* Title */}
+      <div className="flex justify-center mb-4">
+        <img src={logoFull} alt="Lowery's Masonry Logo" className="h-24 w-auto" />
+      </div>
+
       <h1 className="text-5xl md:text-7xl font-bold mb-6">
-        <span className="bg-gradient-to-r from-foreground via-highlight to-glow bg-clip-text text-transparent animate-gradient bg-[length:200%_200%]">
-          Let's Build the Future
-        </span>
+        <span className="text-gray-800">Contact </span>
+        <span className="text-[primary]">Lowery's Masonry</span>
       </h1>
 
-      {/* Subtitle */}
-      <p className="text-lg md:text-xl text-muted max-w-2xl mx-auto">
-        Have questions about our technology? Interested in partnering with us? 
-        We'd love to hear from you.
+      <p className="text-lg md:text-xl text-gray-700 max-w-2xl mx-auto">
+        Ready to start your project? Have questions about our services? 
+        We're here to help. Contact us today for a free estimate.
       </p>
     </div>
   );
 }
 
-// Contact Info Sidebar
 function ContactInfoSidebar() {
   const infoItems = [
     {
+      icon: <Phone className="w-5 h-5" />,
+      title: "Phone",
+      content: "(850) 999-1234",
+      subtext: "Call or text for quick response",
+      action: "tel:+18509991234",
+    },
+    {
+      icon: <Mail className="w-5 h-5" />,
+      title: "Email",
+      content: "roosevelt@lowerysmasonry.com",
+      subtext: "We'll respond within 24 hours",
+      action: "mailto:roosevelt@lowerysmasonry.com",
+    },
+    {
       icon: <MapPin className="w-5 h-5" />,
       title: "Location",
-      content: "New Orleans, LA",
-      subtext: "Innovation Hub",
+      content: "Crawfordville, FL",
+      subtext: "Serving the Big Bend Region",
     },
     {
       icon: <Clock className="w-5 h-5" />,
-      title: "Response Time",
-      content: "Within 24-48 hours",
-      subtext: "Mon - Fri, 9AM - 6PM CST",
-    },
-    {
-      icon: <Sparkles className="w-5 h-5" />,
-      title: "Connect Now",
-      content: "Linktree",
-      subtext: "All our platforms in one place",
-      link: "https://linktr.ee/happyfuturesrobotics",
+      title: "Business Hours",
+      content: "Mon - Fri: 7AM - 6PM",
+      subtext: "Saturday by appointment",
     },
   ];
 
   return (
     <div className="lg:col-span-2 space-y-4">
+      {/* Logo Badge */}
+      <div className="flex justify-center mb-6 lg:mb-4">
+        <img 
+          src={logoTransparent} 
+          alt="Lowery's Masonry Badge" 
+          className="h-32 w-auto opacity-80 hover:opacity-100 transition-opacity"
+        />
+      </div>
+
       {infoItems.map((item, index) => (
-        <div
-          key={index}
-          className="group relative"
-          style={{ animationDelay: `${index * 100}ms` }}
-        >
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-highlight/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition duration-500" />
-          
-          {item.link ? (
+        <div key={index} className="group relative">
+          {item.action ? (
             <a
-              href={item.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="relative block bg-surface/20 backdrop-blur-sm rounded-2xl p-6 
-                       border border-border/30 hover:border-highlight/50 
-                       transition-all duration-300 group cursor-pointer"
+              href={item.action}
+              className="relative block bg-white rounded-2xl p-6 border border-gray-200
+                       hover:border-[muted]/30 hover:shadow-lg transition-all duration-300 group cursor-pointer"
             >
               <div className="flex items-start gap-4">
-                <div className="p-3 bg-primary/20 rounded-xl text-highlight group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300">
+                <div className="p-3 bg-[muted]/10 rounded-xl text-[primary] group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300">
                   {item.icon}
                 </div>
-                <div className="flex-1">
-                  <h3 className="text-sm uppercase tracking-wider text-muted font-mono mb-1">
+                <div>
+                  <h3 className="text-sm uppercase tracking-wider text-gray-500 font-mono mb-1">
                     {item.title}
                   </h3>
-                  <p className="text-lg font-semibold text-foreground mb-1 flex items-center gap-2">
+                  <p className="text-lg font-semibold text-gray-800 mb-1">
                     {item.content}
-                    <ExternalLink className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
                   </p>
-                  <p className="text-sm text-muted">{item.subtext}</p>
+                  <p className="text-sm text-gray-600">{item.subtext}</p>
                 </div>
               </div>
             </a>
           ) : (
-            <div className="relative bg-surface/20 backdrop-blur-sm rounded-2xl p-6 
-                          border border-border/30 hover:border-highlight/50 
-                          transition-all duration-300 group">
+            <div className="relative bg-white rounded-2xl p-6 border border-gray-200
+                          hover:border-[muted]/30 hover:shadow-lg transition-all duration-300 group">
               <div className="flex items-start gap-4">
-                <div className="p-3 bg-primary/20 rounded-xl text-highlight group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300">
+                <div className="p-3 bg-[muted]/10 rounded-xl text-[primary] group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300">
                   {item.icon}
                 </div>
                 <div>
-                  <h3 className="text-sm uppercase tracking-wider text-muted font-mono mb-1">
+                  <h3 className="text-sm uppercase tracking-wider text-gray-500 font-mono mb-1">
                     {item.title}
                   </h3>
-                  <p className="text-lg font-semibold text-foreground mb-1">
+                  <p className="text-lg font-semibold text-gray-800 mb-1">
                     {item.content}
                   </p>
-                  <p className="text-sm text-muted">{item.subtext}</p>
+                  <p className="text-sm text-gray-600">{item.subtext}</p>
                 </div>
               </div>
             </div>
@@ -247,14 +237,13 @@ function ContactInfoSidebar() {
         </div>
       ))}
 
-      {/* Stats/Trust Indicators */}
-      <div className="mt-6 p-6 bg-gradient-to-br from-primary/10 to-highlight/10 rounded-2xl border border-border/30">
+      <div className="mt-6 p-6 bg-gradient-to-br from-[#06D6A0]/5 to-[#00FF22]/5 rounded-2xl border border-gray-900">
         <div className="text-center">
-          <div className="text-3xl font-bold bg-gradient-to-r from-highlight to-glow bg-clip-text text-transparent mb-2">
-            100% Human
+          <div className="text-3xl font-bold text-[primary] mb-2 border-b border-[primary]">
+            Free Estimates
           </div>
-          <p className="text-sm text-muted">
-            Every message is read by our team. We value genuine connections.
+          <p className="text-sm text-gray-600">
+            We provide complimentary consultations and estimates for all projects.
           </p>
         </div>
       </div>
@@ -262,51 +251,48 @@ function ContactInfoSidebar() {
   );
 }
 
-// Contact Form Component
-function ContactForm({ 
-  form, 
-  handleChange, 
-  handleSubmit, 
-  isSubmitting, 
-  activeField, 
-  setActiveField 
-}: any) {
+function ContactForm({ form, handleChange, handleSubmit, isSubmitting, submitStatus, activeField, setActiveField }: any) {
   return (
     <div className="relative group">
-      {/* Glow effect */}
-      <div className="absolute -inset-1 bg-gradient-to-r from-primary via-highlight to-glow rounded-3xl blur-2xl opacity-20 group-hover:opacity-30 transition duration-700" />
-      
       <form
         onSubmit={handleSubmit}
-        className="relative bg-surface/30 backdrop-blur-xl rounded-3xl p-8 md:p-10 
-                   border border-border/30 shadow-2xl"
+        className="relative bg-white rounded-3xl p-8 md:p-10 shadow-xl border border-gray-200"
       >
-        {/* Form Header */}
         <div className="flex items-center gap-3 mb-8">
-          <div className="p-2 bg-highlight/10 rounded-lg">
-            <Mail className="w-5 h-5 text-highlight" />
+          <div className="p-2 bg-[muted]/10 rounded-lg">
+            <Mail className="w-5 h-5 text-[primary]" />
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-foreground">Send a Message</h2>
-            <p className="text-sm text-muted">We'll get back to you as soon as possible</p>
+            <h2 className="text-2xl font-bold text-gray-800">Request a Quote</h2>
+            <p className="text-sm text-gray-600">Tell us about your project</p>
           </div>
         </div>
 
+        {submitStatus.type && (
+          <div className={`mb-6 p-4 rounded-xl ${
+            submitStatus.type === 'success' ? 'bg-green-50 border border-green-200 text-green-700' : 'bg-red-50 border border-red-200 text-red-700'
+          }`}>
+            <div className="flex items-center gap-2">
+              {submitStatus.type === 'success' && <CheckCircle className="w-5 h-5" />}
+              <span>{submitStatus.message}</span>
+            </div>
+          </div>
+        )}
+
         <div className="space-y-6">
-          {/* Name Input */}
           <FormField
             label="Full Name"
             name="name"
             type="text"
             value={form.name}
             onChange={handleChange}
-            placeholder="John Doe"
+            placeholder="John Smith"
             activeField={activeField}
             setActiveField={setActiveField}
             icon="👤"
+            required
           />
 
-          {/* Email Input */}
           <FormField
             label="Email Address"
             name="email"
@@ -317,38 +303,50 @@ function ContactForm({
             activeField={activeField}
             setActiveField={setActiveField}
             icon="📧"
+            required
           />
 
-          {/* Subject Select */}
+          <FormField
+            label="Phone Number"
+            name="phone"
+            type="tel"
+            value={form.phone}
+            onChange={handleChange}
+            placeholder="(850) 999-1234"
+            activeField={activeField}
+            setActiveField={setActiveField}
+            icon="📞"
+            required
+          />
+
           <div className="space-y-2">
-            <label className="flex items-center gap-2 text-sm font-medium text-muted">
-              <span className="text-lg">📋</span>
-              Subject
+            <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
+              <span className="text-lg">🏗️</span>
+              Service Needed
             </label>
             <select
-              name="subject"
-              value={form.subject}
+              name="service"
+              value={form.service}
               onChange={handleChange}
               required
-              className="w-full px-4 py-3 rounded-xl bg-background/50 backdrop-blur-sm 
-                       border border-border text-foreground
-                       focus:outline-none focus:ring-2 focus:ring-highlight/50 focus:border-highlight
+              className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-gray-800
+                       focus:outline-none focus:ring-2 focus:ring-[muted]/50 focus:border-[primary]
                        transition-all duration-300 cursor-pointer"
             >
-              <option value="">Select a topic...</option>
-              <option value="partnership">🤝 Partnership Inquiry</option>
-              <option value="investment">💰 Investment Opportunity</option>
-              <option value="technology">🔧 Technology Questions</option>
-              <option value="careers">💼 Careers</option>
-              <option value="other">💬 General Inquiry</option>
+              <option value="">Select a service...</option>
+              <option value="full-home-bricking">🏠 Full Home Bricking</option>
+              <option value="chimney">🔥 Chimney Construction/Repair</option>
+              <option value="stone-work">🪨 Stone Work</option>
+              <option value="repairs">🔧 Repairs & Restoration</option>
+              <option value="estimate">📋 Free Estimate</option>
+              <option value="other">💬 Other Inquiry</option>
             </select>
           </div>
 
-          {/* Message Input */}
           <div className="space-y-2">
-            <label className="flex items-center gap-2 text-sm font-medium text-muted">
+            <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
               <span className="text-lg">💬</span>
-              Message
+              Project Details
             </label>
             <div className="relative">
               <textarea
@@ -359,75 +357,44 @@ function ContactForm({
                 onBlur={() => setActiveField(null)}
                 required
                 rows={5}
-                className={`w-full px-4 py-3 rounded-xl bg-background/50 backdrop-blur-sm 
-                         border text-foreground placeholder-muted/50 resize-none
-                         focus:outline-none focus:ring-2 focus:ring-highlight/50
+                className={`w-full px-4 py-3 rounded-xl bg-gray-50 border text-gray-800 placeholder-gray-400 resize-none
+                         focus:outline-none focus:ring-2 focus:ring-[muted]/50
                          transition-all duration-300
-                         ${activeField === 'message' ? 'border-highlight shadow-glow' : 'border-border'}`}
-                placeholder="Tell us about your project, question, or opportunity..."
+                         ${activeField === 'message' ? 'border-[primary] shadow-md' : 'border-gray-200'}`}
+                placeholder="Tell us about your project, timeline, budget range, and any specific requirements..."
               />
-              <div className="absolute bottom-3 right-3 text-xs text-muted">
+              <div className="absolute bottom-3 right-3 text-xs text-gray-400">
                 {form.message.length} characters
               </div>
             </div>
           </div>
 
-          {/* Linktree Notice - Elegant way to handle the temporary situation */}
-          <div className="p-4 bg-gradient-to-r from-primary/10 to-highlight/10 rounded-xl border border-border/30">
-            <div className="flex items-start gap-3">
-              <div className="p-1.5 bg-highlight/20 rounded-lg">
-                <Sparkles className="w-4 h-4 text-highlight" />
-              </div>
-              <div className="flex-1">
-                <p className="text-sm text-foreground mb-2">
-                  <span className="font-semibold text-highlight">🚀 Beta Access:</span> Connect with us instantly
-                </p>
-                <p className="text-xs text-muted mb-3">
-                  While we finalize our email system, find all our platforms and updates on Linktree.
-                </p>
-                <a
-                  href="https://linktr.ee/happyfuturesrobotics"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 text-sm text-highlight hover:text-glow transition-colors group"
-                >
-                  Visit our Linktree
-                  <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </a>
-              </div>
-            </div>
-          </div>
-
-          {/* Submit Button */}
           <button
             type="submit"
             disabled={isSubmitting}
             className="relative w-full group/btn overflow-hidden rounded-xl"
           >
-            <div className="absolute inset-0 bg-gradient-to-r from-primary via-highlight to-glow opacity-80 group-hover/btn:opacity-100 transition-opacity" />
-            <div className="relative px-6 py-4 bg-gradient-to-r from-primary to-primaryDark rounded-xl m-[1px]
-                          flex items-center justify-center gap-3 text-foreground font-semibold
-                          group-hover/btn:scale-[0.98] transition-transform duration-300">
+            <div className="relative px-6 py-4 bg-[primary] rounded-xl
+                          flex items-center justify-center gap-3 text-white font-semibold
+                          hover:bg-[#6B1010] transition-colors duration-300
+                          disabled:opacity-50 disabled:cursor-not-allowed">
               {isSubmitting ? (
                 <>
-                  <div className="w-5 h-5 border-2 border-foreground/30 border-t-foreground rounded-full animate-spin" />
+                  <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                   <span>Sending...</span>
                 </>
               ) : (
                 <>
-                  <Send className="w-5 h-5 group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1 transition-transform" />
+                  <Send className="w-5 h-5" />
                   <span>Send Message</span>
                 </>
               )}
             </div>
           </button>
 
-          {/* Trust Message */}
-          <p className="text-xs text-center text-muted">
+          <p className="text-xs text-center text-gray-500">
             By sending a message, you agree to our{" "}
-            <a href="#" className="text-highlight hover:underline">Privacy Policy</a>
-            {" "}and{" "}
-            <a href="#" className="text-highlight hover:underline">Terms of Service</a>
+            <a href="#" className="text-[primary] hover:underline">Privacy Policy</a>
           </p>
         </div>
       </form>
@@ -435,23 +402,12 @@ function ContactForm({
   );
 }
 
-// Form Field Component
-function FormField({ 
-  label, 
-  name, 
-  type, 
-  value, 
-  onChange, 
-  placeholder, 
-  activeField, 
-  setActiveField,
-  icon 
-}: any) {
+function FormField({ label, name, type, value, onChange, placeholder, activeField, setActiveField, icon, required }: any) {
   return (
     <div className="space-y-2">
-      <label className="flex items-center gap-2 text-sm font-medium text-muted">
+      <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
         <span className="text-lg">{icon}</span>
-        {label}
+        {label} {required && <span className="text-[primary]">*</span>}
       </label>
       <input
         type={type}
@@ -460,35 +416,32 @@ function FormField({
         onChange={onChange}
         onFocus={() => setActiveField(name)}
         onBlur={() => setActiveField(null)}
-        required
-        className={`w-full px-4 py-3 rounded-xl bg-background/50 backdrop-blur-sm 
-                   border text-foreground placeholder-muted/50
-                   focus:outline-none focus:ring-2 focus:ring-highlight/50
+        required={required}
+        className={`w-full px-4 py-3 rounded-xl bg-gray-50 border text-gray-800 placeholder-gray-400
+                   focus:outline-none focus:ring-2 focus:ring-[muted]/50
                    transition-all duration-300
-                   ${activeField === name ? 'border-highlight shadow-glow' : 'border-border'}`}
+                   ${activeField === name ? 'border-[primary] shadow-md' : 'border-gray-200'}`}
         placeholder={placeholder}
       />
     </div>
   );
 }
 
-// Alternative Contact Methods
 function AlternativeContact() {
   const platforms = [
-    { name: "LinkedIn", icon: "💼", url: "#" },
-    { name: "Twitter/X", icon: "🐦", url: "https://x.com/HFR_NOLA" },
-    { name: "GitHub", icon: "💻", url: "#" },
-    { name: "Instagram", icon: "📸", url: "https://www.instagram.com/Happyfuturesrobotics" },
+    { name: "Facebook", icon: <Facebook className="w-5 h-5" />, url: "#", color: "hover:text-[#1877f2]" },
+    { name: "Instagram", icon: <Instagram className="w-5 h-5" />, url: "#", color: "hover:text-[#e4405f]" },
+    { name: "Messenger", icon: <MessageCircle className="w-5 h-5" />, url: "#", color: "hover:text-[#0084ff]" },
   ];
 
   return (
     <div className="mt-16 text-center">
       <div className="inline-flex items-center gap-2 mb-6">
-        <div className="h-px w-8 bg-border" />
-        <span className="text-xs uppercase tracking-wider text-muted font-mono">
-          Also Find Us On
+        <div className="h-px w-8 bg-gray-300" />
+        <span className="text-xs uppercase tracking-wider text-gray-500 font-mono">
+          Connect With Us
         </span>
-        <div className="h-px w-8 bg-border" />
+        <div className="h-px w-8 bg-gray-300" />
       </div>
 
       <div className="flex flex-wrap justify-center gap-4">
@@ -496,13 +449,12 @@ function AlternativeContact() {
           <a
             key={index}
             href={platform.url}
-            className="group px-6 py-3 bg-surface/20 backdrop-blur-sm rounded-full 
-                     border border-border/30 hover:border-highlight/50
-                     transition-all duration-300 hover:scale-105"
+            className={`group px-6 py-3 bg-white rounded-full border border-gray-700
+                     transition-all duration-300 hover:scale-105 hover:shadow-md ${platform.color}`}
           >
             <span className="flex items-center gap-2">
-              <span className="text-xl">{platform.icon}</span>
-              <span className="text-sm text-muted group-hover:text-foreground transition-colors">
+              {platform.icon}
+              <span className="text-sm text-gray-800 group-hover:text-inherit transition-colors">
                 {platform.name}
               </span>
             </span>
@@ -510,12 +462,11 @@ function AlternativeContact() {
         ))}
       </div>
 
-      {/* Footer Note */}
-      <p className="mt-8 text-xs text-muted/60">
-        © 2026 Happy Futures Robotics. All rights reserved. 
+      <p className="mt-8 text-xs text-gray-500">
+        © {new Date().getFullYear()} Lowery's Masonry. All rights reserved.
         <br className="sm:hidden" />
         <span className="hidden sm:inline mx-2">•</span>
-        New Orleans, LA • Building the future of autonomous robotics
+        Crawfordville, FL • Quality Masonry Since the 1960s
       </p>
     </div>
   );
