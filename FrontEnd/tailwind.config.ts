@@ -6,51 +6,48 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
-    safelist: [
+  safelist: [
     { pattern: /bg-(red|blue|green|yellow|pink|purple|indigo|gray|black|white|zinc|slate|orange|lime|emerald|teal|cyan|fuchsia|violet|rose)-(50|100|200|300|400|500|600|700|800|900|950)/ },
     { pattern: /text-(red|blue|green|yellow|pink|purple|indigo|gray|black|white|zinc|slate|orange|lime|emerald|teal|cyan|fuchsia|violet|rose)-(50|100|200|300|400|500|600|700|800|900|950)/ },
     'bg-gradient-to-br',
-    'from-red-500',
-    'via-yellow-500',
-    'via-green-500',
-    'to-purple-500'
   ],
   darkMode: 'class',
   theme: {
     extend: {
- colors: {
-    // Base UI shades
-    background: '#121515',
-    surface: '#393c3c',
-    border: '#656868',
-    muted: '#959898',
-    foreground: '#c7cbcb',
-    deepBlack: '#040e15ee',
-    // Brand / accent system
-    primary: '#215374',
-    primaryLight: '#628b9e',
-    primaryDark: '#1d3640',
-
-    highlight: '#6bcdc8',
-    glow: '#71f9f2',
-
-    // Optional semantic colors (future-proofing)
-    success: '#629e64',
-    warning: '#f9f871',
-    danger: '#ff4f58', // you can keep this from old config if useful
-  },
-
-  backgroundImage: {
-    'brand-gradient': 'linear-gradient(135deg, #121315, #1d2c40, #34486e, #627e9e, #6b95cd, #71bcf9)',
-    'dark-gradient': 'linear-gradient(135deg, #080809f7, #0b1016, #070e0e, #070707, #050707, #090909)',
-     'grid-pattern': 'linear-gradient(rgba(107, 205, 200, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(107, 205, 200, 0.05) 1px, transparent 1px)',
-  },
- backgroundSize: {
-      'grid': '50px 50px',
-    },
-  boxShadow: {
-    glow: '0 0 15px #a4cd6b',
-  },
+      colors: {
+        // Warm, professional silver/charcoal base - NO stark whites or light reds
+        background: '#EBEBEB',  // Warm cream-silver
+        surface: '#F5F3EF',     // Warm off-white for cards
+        border: '#B8B5AD',      // Muted silver-gray
+        muted: '#8A8780',       // Warm gray
+        foreground: '#2C2C2C',  // Deep charcoal for text
+        
+        deepBlack: '#1a1a1a',
+        
+        // Deep, earthy brick red (not bright or light)
+        primary: '#6B2E2E',     // Deep warm brick red
+        primaryLight: '#8B4A4A', // Slightly lighter but still deep
+        primaryDark: '#4A2020',   // Very dark brick
+        
+        // Silver accents (professional, neutral)
+        highlight: '#A8A5A0',   // Warm silver
+        glow: '#6B2E2E',        // Same as primary for consistency
+        
+        success: '#4CAF50',
+        warning: '#FFC107',
+        danger: '#f44336',
+      },
+      backgroundImage: {
+        'brand-gradient': 'linear-gradient(135deg, #E8E6E1, #F5F3EF, #E8E6E1)',
+        'dark-gradient': 'linear-gradient(135deg, #E8E6E1, #F5F3EF, #DCD9D2)',
+        'grid-pattern': 'linear-gradient(rgba(107, 46, 46, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(107, 46, 46, 0.03) 1px, transparent 1px)',
+      },
+      backgroundSize: {
+        'grid': '50px 50px',
+      },
+      boxShadow: {
+        glow: '0 0 15px rgba(107, 46, 46, 0.25)', // Softer, darker red glow
+      },
       borderRadius: {
         lg: `var(--radius)`,
         md: `calc(var(--radius) - 2px)`,
@@ -127,7 +124,7 @@ export default {
       fontFamily: {
         mono: ['"Roboto Mono"', 'ui-monospace', 'SFMono-Regular', 'monospace'],
         exo: ['"Exo 2"', 'ui-sans-serif', 'system-ui'],
-         sans: ['Orbitron', 'ui-sans-serif', 'system-ui'],
+        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
       },
     },
   },
