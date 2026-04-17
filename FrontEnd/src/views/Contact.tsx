@@ -156,16 +156,16 @@ function ContactInfoSidebar() {
     {
       icon: <Phone className="w-5 h-5" />,
       title: "Phone",
-      content: "(850) 999-1234",
+      content: "(850) 567-6080",
       subtext: "Call or text for quick response",
-      action: "tel:+18509991234",
+      action: "tel:+18505676080",
     },
     {
       icon: <Mail className="w-5 h-5" />,
       title: "Email",
-      content: "roosevelt@lowerysmasonry.com",
+      content: "lowerysmasonry@gmail.com",
       subtext: "We'll respond within 24 hours",
-      action: "mailto:roosevelt@lowerysmasonry.com",
+      action: "mailto:lowerysmasonry@gmail.com",
     },
     {
       icon: <MapPin className="w-5 h-5" />,
@@ -312,7 +312,7 @@ function ContactForm({ form, handleChange, handleSubmit, isSubmitting, submitSta
             type="tel"
             value={form.phone}
             onChange={handleChange}
-            placeholder="(850) 999-1234"
+            placeholder="(850) 567-6080"
             activeField={activeField}
             setActiveField={setActiveField}
             icon="📞"

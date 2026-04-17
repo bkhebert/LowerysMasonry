@@ -269,5 +269,5 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`🚀 Lowery's Masonry API running on port ${PORT}`);
   console.log(`📧 Email notifications will be sent to: ${process.env.NOTIFICATION_EMAIL || "lowerysmasonry@gmail.com"}`);
-  console.log(`📱 Business phone: ${process.env.BUSINESS_PHONE || "(850) 999-1234"}`);
+  console.log(`📱 Business phone: ${process.env.BUSINESS_PHONE || "(850) 567-6080"}`);
 });

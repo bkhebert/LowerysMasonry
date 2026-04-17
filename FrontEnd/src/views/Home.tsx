@@ -91,7 +91,7 @@ function HeroSection() {
               <span className="relative z-10">Get Free Estimate</span>
             </button>
           </Link>
-          <a href="tel:+18509991234">
+          <a href="tel:+18505676080">
             <button className="px-8 py-4 border-2 border-primary rounded-xl text-primary font-semibold
                              hover:bg-primary hover:text-white transition-all duration-300">
               <Phone className="inline-block w-4 h-4 mr-2" />
@@ -346,10 +346,10 @@ function CTASection() {
               Get Free Estimate
             </button>
           </Link>
-          <a href="tel:+18509991234">
+          <a href="tel:+18505676080">
             <button className="px-10 py-5 bg-transparent border-2 border-white text-white rounded-xl font-bold text-lg
                              hover:bg-white hover:text-primary transition-all duration-300">
-              Call: (850) 999-1234
+              Call: (850) 567-6080
             </button>
           </a>
         </div>
