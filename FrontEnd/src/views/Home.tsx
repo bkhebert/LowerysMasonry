@@ -322,30 +322,37 @@ function WhyChooseUsSection() {
   );
 }
 
-// CTA Section
 function CTASection() {
   return (
-    <div className="w-full max-w-7xl mx-auto px-6 py-24">
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-surface/50 to-background/50 
-                    backdrop-blur-xl border border-border/30 p-16 text-center">
-        {/* Animated background pattern */}
-        <div className="absolute inset-0 bg-grid-pattern opacity-5" />
-        
-        <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-highlight to-glow 
-                     bg-clip-text text-transparent">
-          Ready to Shape the Future?
+    <div className="w-full relative py-20 overflow-hidden">
+      <div 
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: `url(${closeupBrickwork})` }}
+      >
+        <div className="absolute inset-0 bg-muted/90" />
+      </div>
+      
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 text-center">
+        <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+          Ready to Start Your Project?
         </h2>
-        <p className="text-xl text-muted mb-8 max-w-2xl mx-auto">
-          Join us in revolutionizing autonomous robotics. Be part of the next breakthrough in mobile AI technology.
+        <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
+          Contact us today for a free estimate. Let our family help build your dream home.
         </p>
-        <Link to="/contact">
-        <button className="px-10 py-5 bg-gradient-to-r from-highlight to-glow rounded-xl 
-                         text-background font-bold text-lg shadow-glow
-                         hover:scale-105 hover:shadow-2xl transition-all duration-300
-                         animate-pulse">
-          Partner With Us
-        </button>
-        </Link>
+        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <Link to="/contact">
+            <button className="px-10 py-5 bg-surface text-primary rounded-xl font-bold text-lg
+                             hover:shadow-xl transition-all duration-300">
+              Get Free Estimate
+            </button>
+          </Link>
+          <a href="tel:+18509991234">
+            <button className="px-10 py-5 bg-transparent border-2 border-white text-white rounded-xl font-bold text-lg
+                             hover:bg-white hover:text-primary transition-all duration-300">
+              Call: (850) 999-1234
+            </button>
+          </a>
+        </div>
       </div>
     </div>
   );
