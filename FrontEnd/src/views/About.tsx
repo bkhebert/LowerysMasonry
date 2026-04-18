@@ -17,8 +17,6 @@ function About() {
     <div className="min-h-screen bg-gradient-to-br from-background to-background/80 ">
       <div className="relative z-10 max-w-7xl mx-auto px-6 py-16">
         <HeroAboutSection />
-        <CompanyStorySection />
-        <CommunityImpactSection />
         <ValuesSection />
         
         <div className="text-center mb-16">
@@ -34,6 +32,8 @@ function About() {
         </div>
         
         <TeamSection />
+        <CompanyStorySection />
+        <CommunityImpactSection />
         <JoinUsSection />
       </div>
     </div>
