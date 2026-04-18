@@ -141,7 +141,7 @@ function CompanyStorySection() {
   return (
     <div
       ref={storyRef}
-      className="mb-24 opacity-0 translate-y-8 transition-all duration-700 ease-out
+      className="mb-24 mt-24opacity-0 translate-y-8 transition-all duration-700 ease-out
                  [&.section-visible]:opacity-100 [&.section-visible]:translate-y-0"
     >
       <div className="grid md:grid-cols-2 gap-12 items-center">
